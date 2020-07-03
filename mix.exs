@@ -1,4 +1,4 @@
-defmodule TelegexMark.MixProject do
+defmodule Telegex.Mark.MixProject do
   use Mix.Project
 
   @version "0.0.1"
