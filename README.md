@@ -4,4 +4,4 @@ Safe Markdown parser, customized for Telegram.
 
 ## Implementing...
 
-Please wait 😋.
+Please wait.
