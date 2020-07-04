@@ -1,7 +1,5 @@
-# Telegex.Mark
+# Telegex.Marked
 
-Safe Markdown parser, customized for Telegram.
+Safe Markdown parser/renderer, customized for Telegram.
 
-## Implementing...
-
-Please wait.
+**[WIP]**

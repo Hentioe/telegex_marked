@@ -1,4 +1,4 @@
-defmodule Telegex.Mark do
+defmodule Telegex.Marked do
   def hello do
     :world
   end

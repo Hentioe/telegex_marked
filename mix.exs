@@ -1,11 +1,11 @@
-defmodule Telegex.Mark.MixProject do
+defmodule Telegex.Marked.MixProject do
   use Mix.Project
 
   @version "0.0.1"
 
   def project do
     [
-      app: :telegex_mark,
+      app: :telegex_marked,
       version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,

@@ -20,7 +20,7 @@ erl_crash.dump
 *.ez
 
 # Ignore package tarball (built via "mix hex.build").
-telegex_mark-*.tar
+telegex_marked-*.tar
 
 # ElixirLS
 /.elixir_ls
