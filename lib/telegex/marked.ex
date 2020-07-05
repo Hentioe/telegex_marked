@@ -3,6 +3,8 @@ defmodule Telegex.Marked do
   Safe Markdown parser/renderer for Telegram.
   """
 
+  @type document :: [Telegex.Marked.Node]
+
   @spec as_html(String.t()) :: String.t()
   @doc """
   Convert Markdown text to HTML text.

@@ -11,5 +11,5 @@ defmodule Telegex.Marked.Renderer do
     end
   end
 
-  @callback render([Telegex.Marked.Node.t()], keyword()) :: String.t()
+  @callback render(Telegex.Marked.document(), keyword()) :: String.t()
 end
