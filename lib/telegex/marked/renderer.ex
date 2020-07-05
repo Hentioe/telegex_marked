@@ -6,8 +6,10 @@ defmodule Telegex.Marked.Renderer do
   defmacro __using__(_) do
     quote do
       @behaviour Telegex.Marked.Renderer
+
+      alias Telegex.Marked.Node
     end
   end
 
-  @callback render(Telegex.Marked.Node.t()) :: String.t()
+  @callback render([Telegex.Marked.Node.t()], keyword()) :: String.t()
 end

@@ -10,16 +10,22 @@ defmodule Telegex.Marked.Node do
           | :link
           | :inline_code
           | :code_block
+          | :string
 
-  defstruct [:type, :data, :parent, :first_child, :last_child, :prev, :next]
+  @enforce_keys [:type]
+  defstruct type: nil, data: [], children: []
 
   @type t :: %__MODULE__{
           type: nodetypes(),
-          data: %{String.t() => String.t()},
-          parent: __MODULE__.t() | nil,
-          first_child: __MODULE__.t() | nil,
-          last_child: __MODULE__.t() | nil,
-          prev: __MODULE__.t() | nil,
-          next: __MODULE__.t() | nil
+          data: [{atom(), String.t()}] | String.t(),
+          children: [t()]
         }
+
+  def string_node(text) do
+    %__MODULE__{type: :string, data: text}
+  end
+
+  def string_children(text) do
+    [string_node(text)]
+  end
 end
