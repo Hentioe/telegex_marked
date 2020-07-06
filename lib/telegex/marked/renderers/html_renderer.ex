@@ -6,11 +6,8 @@ defmodule Telegex.Marked.HTMLRenderer do
   use Telegex.Marked.Renderer
 
   @impl true
-  def render(document, options \\ []) do
-    root_nodes = options |> Keyword.get(:root_nodes, false)
-    separator = if root_nodes, do: "\n", else: ""
-
-    document |> Enum.map(&render_node/1) |> Enum.join(separator)
+  def render(document, _options \\ []) do
+    document |> Enum.map(&render_node/1) |> Enum.join("")
   end
 
   def render_node(%Node{type: :bold, children: children}) do
@@ -33,7 +30,7 @@ defmodule Telegex.Marked.HTMLRenderer do
     "<s>" <> children_html <> "</s>"
   end
 
-  def render_node(%Node{type: :link, children: children, data: data}) do
+  def render_node(%Node{type: :link, data: data, children: children}) do
     children_html = render(children)
 
     if href = data |> Keyword.get(:href) do
@@ -56,6 +53,10 @@ defmodule Telegex.Marked.HTMLRenderer do
     else
       "<pre>" <> children_html <> "</pre>"
     end
+  end
+
+  def render_node(%Node{type: :newline}) do
+    "\n"
   end
 
   def render_node(%Node{type: :string, data: data}) do
