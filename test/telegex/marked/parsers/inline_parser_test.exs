@@ -70,6 +70,34 @@ defmodule Telegex.Marked.InlineParserTest do
         ],
         data: [],
         type: :bold
+      },
+      %Telegex.Marked.Node{children: [], data: [], type: :newline}
+    ],
+    [
+      %Telegex.Marked.Node{
+        children: [%Telegex.Marked.Node{children: [], data: "inline URL", type: :string}],
+        data: [href: "http://www.example.com/"],
+        type: :link
+      },
+      %Telegex.Marked.Node{children: [], data: [], type: :newline}
+    ],
+    [
+      %Telegex.Marked.Node{
+        children: [
+          %Telegex.Marked.Node{children: [], data: "inline mention of a user", type: :string}
+        ],
+        data: [href: "tg://user?id=123456789"],
+        type: :link
+      },
+      %Telegex.Marked.Node{children: [], data: [], type: :newline}
+    ],
+    [
+      %Telegex.Marked.Node{
+        children: [
+          %Telegex.Marked.Node{children: [], data: "inline fixed-width code", type: :string}
+        ],
+        data: [],
+        type: :inline_code
       }
     ]
   ]
@@ -79,6 +107,9 @@ defmodule Telegex.Marked.InlineParserTest do
     normal1*bold1*normal2*blod2*normal3
     *bold __underline__ bold*
     *bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
+    [inline URL](http://www.example.com/)
+    [inline mention of a user](tg://user?id=123456789)
+    `inline fixed-width code`
     """
 
     markdown = markdown |> String.trim()

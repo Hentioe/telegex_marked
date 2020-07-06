@@ -5,9 +5,16 @@ defmodule Telegex.Marked.InlineParser do
 
   use Telegex.Marked.Parser
 
-  alias Telegex.Marked.{BoldRule, UnderlineRule, ItalicRule, StrikethroughRule}
+  alias Telegex.Marked.{
+    BoldRule,
+    UnderlineRule,
+    ItalicRule,
+    StrikethroughRule,
+    LinkRule,
+    InlineCodeRule
+  }
 
-  @rule_modules [BoldRule, UnderlineRule, ItalicRule, StrikethroughRule]
+  @rule_modules [BoldRule, UnderlineRule, ItalicRule, StrikethroughRule, LinkRule, InlineCodeRule]
 
   @spec parse(String.t(), keyword()) :: Telegex.Marked.document()
   def parse(markdown, _options \\ []) do
