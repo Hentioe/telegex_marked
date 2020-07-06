@@ -3,6 +3,14 @@ defmodule Telegex.Marked.Parser do
   Markdown parsing implementation.
   """
 
+  defmacro __using__(_) do
+    quote do
+      alias Telegex.Marked.{State, Node}
+
+      import Telegex.Marked.Node
+    end
+  end
+
   @type parseopts :: keyword()
 
   @spec parse(String.t(), parseopts()) :: Telegex.Marked.document()

@@ -3,7 +3,7 @@ defmodule Telegex.Marked do
   Safe Markdown parser/renderer for Telegram.
   """
 
-  @type document :: [Telegex.Marked.Node]
+  @type document :: [[Telegex.Marked.Node.t()]]
 
   @spec as_html(String.t()) :: String.t()
   @doc """

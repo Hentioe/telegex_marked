@@ -22,67 +22,75 @@ defmodule Telegex.Marked.HTMLRendererTest do
 
   test "render/1" do
     document = [
-      %Node{type: :bold, children: string_children("bold")},
-      newline_node(),
-      %Node{type: :italic, children: string_children("italic")},
-      newline_node(),
-      %Node{type: :underline, children: string_children("underline")},
-      newline_node(),
-      %Node{type: :strikethrough, children: string_children("strikethrough")},
-      newline_node(),
-      %Node{
-        type: :bold,
-        children: [
-          string_node("bold "),
-          %Node{
-            type: :italic,
-            children: [
-              string_node("italic bold "),
-              %Node{
-                type: :strikethrough,
-                children: string_children("italic bold strikethrough")
-              },
-              string_node(" "),
-              %Node{
-                type: :underline,
-                children: string_children("underline italic bold")
-              }
-            ]
-          },
-          string_node(" bold")
-        ]
-      },
-      newline_node(),
-      %Node{
-        type: :link,
-        data: [href: "http://www.example.com/"],
-        children: string_children("inline URL")
-      },
-      newline_node(),
-      %Node{
-        type: :link,
-        data: [href: "tg://user?id=123456789"],
-        children: string_children("inline mention of a user")
-      },
-      newline_node(),
-      %Node{
-        type: :inline_code,
-        children: string_children("inline fixed-width code")
-      },
-      newline_node(),
-      %Node{
-        type: :code_block,
-        children: string_children("pre-formatted fixed-width code block")
-      },
-      newline_node(),
-      %Node{
-        type: :code_block,
-        data: [language: "python"],
-        children:
-          string_children(
-            "pre-formatted fixed-width code block written in the Python programming language"
-          )
-      }
+      [%Node{type: :bold, children: string_children("bold")}, newline_node()],
+      [%Node{type: :italic, children: string_children("italic")}, newline_node()],
+      [%Node{type: :underline, children: string_children("underline")}, newline_node()],
+      [%Node{type: :strikethrough, children: string_children("strikethrough")}, newline_node()],
+      [
+        %Node{
+          type: :bold,
+          children: [
+            string_node("bold "),
+            %Node{
+              type: :italic,
+              children: [
+                string_node("italic bold "),
+                %Node{
+                  type: :strikethrough,
+                  children: string_children("italic bold strikethrough")
+                },
+                string_node(" "),
+                %Node{
+                  type: :underline,
+                  children: string_children("underline italic bold")
+                }
+              ]
+            },
+            string_node(" bold")
+          ]
+        },
+        newline_node()
+      ],
+      [
+        %Node{
+          type: :link,
+          data: [href: "http://www.example.com/"],
+          children: string_children("inline URL")
+        },
+        newline_node()
+      ],
+      [
+        %Node{
+          type: :link,
+          data: [href: "tg://user?id=123456789"],
+          children: string_children("inline mention of a user")
+        },
+        newline_node()
+      ],
+      [
+        %Node{
+          type: :inline_code,
+          children: string_children("inline fixed-width code")
+        },
+        newline_node()
+      ],
+      [
+        %Node{
+          type: :code_block,
+          children: string_children("pre-formatted fixed-width code block")
+        },
+        newline_node()
+      ],
+      [
+        %Node{
+          type: :code_block,
+          data: [language: "python"],
+          children:
+            string_children(
+              "pre-formatted fixed-width code block written in the Python programming language"
+            )
+        }
+      ]
     ]
 
     assert render(document, root_nodes: true) == @html_result
