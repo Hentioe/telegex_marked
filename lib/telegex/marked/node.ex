@@ -41,9 +41,4 @@ defmodule Telegex.Marked.Node do
   def newline_children() do
     [newline_node()]
   end
-
-  @spec merge_string_node(t(), t()) :: t()
-  def merge_string_node(node1, node2) do
-    string_node(node1.data <> node2.data)
-  end
 end
