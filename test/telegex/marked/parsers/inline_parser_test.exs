@@ -33,6 +33,43 @@ defmodule Telegex.Marked.InlineParserTest do
         ],
         data: [],
         type: :bold
+      },
+      %Telegex.Marked.Node{children: [], data: [], type: :newline}
+    ],
+    [
+      %Telegex.Marked.Node{
+        children: [
+          %Telegex.Marked.Node{children: [], data: "bold ", type: :string},
+          %Telegex.Marked.Node{
+            children: [
+              %Telegex.Marked.Node{children: [], data: "italic bold ", type: :string},
+              %Telegex.Marked.Node{
+                children: [
+                  %Telegex.Marked.Node{
+                    children: [],
+                    data: "italic bold strikethrough",
+                    type: :string
+                  }
+                ],
+                data: [],
+                type: :strikethrough
+              },
+              %Telegex.Marked.Node{children: [], data: " ", type: :string},
+              %Telegex.Marked.Node{
+                children: [
+                  %Telegex.Marked.Node{children: [], data: "underline italic bold", type: :string}
+                ],
+                data: [],
+                type: :underline
+              }
+            ],
+            data: [],
+            type: :italic
+          },
+          %Telegex.Marked.Node{children: [], data: " bold", type: :string}
+        ],
+        data: [],
+        type: :bold
       }
     ]
   ]
@@ -41,6 +78,7 @@ defmodule Telegex.Marked.InlineParserTest do
     markdown = """
     normal1*bold1*normal2*blod2*normal3
     *bold __underline__ bold*
+    *bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
     """
 
     markdown = markdown |> String.trim()
