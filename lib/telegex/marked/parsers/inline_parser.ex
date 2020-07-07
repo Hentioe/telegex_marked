@@ -37,7 +37,7 @@ defmodule Telegex.Marked.InlineParser do
       if ok? do
         new_nodes = expand_children(state.nodes)
 
-        if state.pos <= init_state.len - 1 do
+        if state.pos <= init_state.line.len - 1 do
           parse_line(line, lastline?, state.pos + 1, nodes ++ new_nodes)
         else
           if lastline?, do: nodes ++ new_nodes, else: nodes ++ new_nodes ++ [newline_node()]
@@ -45,7 +45,7 @@ defmodule Telegex.Marked.InlineParser do
       else
         # 如果不匹配任何节点，逐字符继续匹配。
         # 如果最后一个节点也是字符串，则合并（避免逐字符匹配产生大量的连续单字符节点）。
-        if state.pos <= init_state.len - 1 do
+        if state.pos <= init_state.line.len - 1 do
           len = length(nodes)
           this_char = String.at(line, state.pos)
 

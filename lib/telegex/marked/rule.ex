@@ -23,7 +23,7 @@ defmodule Telegex.Marked.Rule do
 
           @impl true
           def match?(state) do
-            %{src: src, pos: pos, len: len} = state
+            %{line: %{src: src, len: len}, pos: pos} = state
 
             begin_at_src = src |> String.slice(pos, len)
 
@@ -60,7 +60,7 @@ defmodule Telegex.Marked.Rule do
         else
           @impl true
           def match?(state) do
-            %{src: src, pos: pos, len: len} = state
+            %{line: %{src: src, len: len}, pos: pos} = state
 
             if String.at(src, pos) != unquote(mark) do
               {false, state}

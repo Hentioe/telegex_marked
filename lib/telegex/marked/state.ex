@@ -1,25 +1,22 @@
 defmodule Telegex.Marked.State do
   @moduledoc false
 
-  alias Telegex.Marked.Node
+  alias Telegex.Marked.{Node, Line}
 
-  @enforce_keys [:src, :len]
-  defstruct src: nil, pos: 0, len: nil, nodes: []
+  @enforce_keys [:line]
+  defstruct line: nil, pos: 0, nodes: []
 
   @type t :: %__MODULE__{
-          src: String.t(),
+          line: Line.t(),
           pos: integer(),
-          len: integer(),
           nodes: [Node.t()]
         }
 
   @spec new(String.t(), integer()) :: t()
   def new(src, pos) when is_binary(src) and is_integer(pos) do
     %__MODULE__{
-      src: src,
-      pos: pos,
-      len: String.length(src),
-      nodes: []
+      line: Line.new(src),
+      pos: pos
     }
   end
 
