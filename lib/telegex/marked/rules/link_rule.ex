@@ -37,7 +37,7 @@ defmodule Telegex.Marked.LinkRule do
 
         state =
           state
-          |> State.push_node(%Node{
+          |> InlineState.push_node(%Node{
             type: @ntype,
             data: [href: href],
             children: link_text

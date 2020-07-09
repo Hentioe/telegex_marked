@@ -29,7 +29,7 @@ defmodule Telegex.Marked.InlineParser do
 
   @spec parse_line(String.t(), boolean(), integer(), [Node.t()]) :: [Node.t()]
   defp parse_line(line, lastline?, pos, nodes \\ []) do
-    init_state = State.new(line, pos)
+    init_state = InlineState.new(line, pos)
 
     {ok?, state} = parse_node(init_state)
 
@@ -88,8 +88,8 @@ defmodule Telegex.Marked.InlineParser do
     nodes |> Enum.map(&expand_children/1)
   end
 
-  @spec parse_node(State.t()) :: {boolean(), State.t()}
-  defp parse_node(%State{} = state) do
+  @spec parse_node(InlineState.t()) :: {boolean(), InlineState.t()}
+  defp parse_node(%InlineState{} = state) do
     @rule_modules
     |> Enum.reduce_while({false, state}, fn rule_module, result ->
       {ok?, state} = rule_module.match?(state)

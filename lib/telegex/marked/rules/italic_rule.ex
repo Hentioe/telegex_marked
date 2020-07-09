@@ -41,7 +41,7 @@ defmodule Telegex.Marked.ItalicRule do
 
         state =
           state
-          |> State.push_node(%Node{
+          |> InlineState.push_node(%Node{
             type: @ntype,
             children: children_text(src, pos, end_index)
           })
