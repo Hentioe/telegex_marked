@@ -4,6 +4,7 @@ defmodule Telegex.Marked do
   """
 
   @type document :: [[Telegex.Marked.Node.t()]]
+  @type state :: Telegex.Marked.InlineState.t()
 
   @spec as_html(String.t()) :: String.t()
   @doc """

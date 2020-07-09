@@ -6,7 +6,7 @@ defmodule Telegex.Marked.Parser do
   defmacro __using__(_) do
     quote do
       alias Telegex.Marked.Node
-      alias Telegex.Marked.Rule.InlineState
+      alias Telegex.Marked.InlineState
 
       import Telegex.Marked.Node
     end
