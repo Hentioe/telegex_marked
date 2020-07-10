@@ -31,10 +31,8 @@ defmodule Telegex.Marked.InlineParser do
   defp parse_line(line, lastline?, pos, nodes \\ []) do
     init_state = InlineState.new(line, pos)
 
-    {ok?, state} = parse_node(init_state)
-
-    nodes =
-      if ok? do
+    case parse_node(init_state) do
+      {:match, state} ->
         new_nodes = expand_children(state.nodes)
 
         if state.pos <= init_state.line.len - 1 do
@@ -42,36 +40,50 @@ defmodule Telegex.Marked.InlineParser do
         else
           if lastline?, do: nodes ++ new_nodes, else: nodes ++ new_nodes ++ [newline_node()]
         end
-      else
+
+      {:nomatch, state} ->
         # 如果不匹配任何节点，逐字符继续匹配。
-        # 如果最后一个节点也是字符串，则合并（避免逐字符匹配产生大量的连续单字符节点）。
-        if state.pos <= init_state.line.len - 1 do
-          len = length(nodes)
-          this_char = String.at(line, state.pos)
+        nomatch(line, state, nodes, state.pos <= init_state.line.len - 1, lastline?)
+    end
+  end
 
-          nodes =
-            if len > 0 do
-              {last_node, nodes} = nodes |> List.pop_at(len - 1)
+  @spec parse_node(InlineState.t()) :: {Telegex.Marked.inline_match_status(), InlineState.t()}
+  defp parse_node(%InlineState{} = state) do
+    @rule_modules
+    |> Enum.reduce_while({:nomatch, state}, fn rule_module, result ->
+      {status, state} = rule_module.match(state)
 
-              case last_node do
-                # 合并字符到上一个字符串节点中
-                %Node{type: :string, data: data} ->
-                  nodes ++ [string_node(data <> this_char)]
+      if status == :match, do: {:halt, {:match, state}}, else: {:cont, result}
+    end)
+  end
 
-                _ ->
-                  nodes ++ [last_node, string_node(this_char)]
-              end
-            else
-              nodes ++ [string_node(this_char)]
-            end
+  @spec nomatch(String.t(), InlineState.t(), [Node.t()], boolean(), boolean()) :: [Node.t()]
+  defp nomatch(line, %InlineState{} = state, nodes, not_ending?, lastline?) do
+    # 如果最后一个节点也是字符串，则合并（避免逐字符匹配产生大量的连续单字符节点）。
+    if not_ending? do
+      len = length(nodes)
+      this_char = String.at(line, state.pos)
 
-          parse_line(line, lastline?, state.pos + 1, nodes)
+      nodes =
+        if len > 0 do
+          {last_node, nodes} = nodes |> List.pop_at(len - 1)
+
+          case last_node do
+            # 合并字符到上一个字符串节点中
+            %Node{type: :string, data: data} ->
+              nodes ++ [string_node(data <> this_char)]
+
+            _ ->
+              nodes ++ [last_node, string_node(this_char)]
+          end
         else
-          if lastline?, do: nodes ++ state.nodes, else: nodes ++ state.nodes ++ [newline_node()]
+          nodes ++ [string_node(this_char)]
         end
-      end
 
-    nodes
+      parse_line(line, lastline?, state.pos + 1, nodes)
+    else
+      if lastline?, do: nodes ++ state.nodes, else: nodes ++ state.nodes ++ [newline_node()]
+    end
   end
 
   @spec expand_children(Node.t()) :: Node.t()
@@ -86,15 +98,5 @@ defmodule Telegex.Marked.InlineParser do
   @spec expand_children([Node.t()]) :: [Node.t()]
   defp expand_children(nodes) when is_list(nodes) do
     nodes |> Enum.map(&expand_children/1)
-  end
-
-  @spec parse_node(InlineState.t()) :: {boolean(), InlineState.t()}
-  defp parse_node(%InlineState{} = state) do
-    @rule_modules
-    |> Enum.reduce_while({false, state}, fn rule_module, result ->
-      {ok?, state} = rule_module.match?(state)
-
-      if ok?, do: {:halt, {true, state}}, else: {:cont, result}
-    end)
   end
 end

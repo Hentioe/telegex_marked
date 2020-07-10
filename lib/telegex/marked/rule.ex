@@ -3,15 +3,6 @@ defmodule Telegex.Marked.Rule do
   Node matching and parsing rules.
   """
 
-  defmacro create_push_node_fun do
-    quote do
-      @spec push_node(t(), Node.t()) :: t()
-      def push_node(%__MODULE__{} = state, %Node{} = node) do
-        %{state | nodes: state.nodes ++ [node]}
-      end
-    end
-  end
-
   defmacro __using__(options) do
     mark = options |> Keyword.get(:mark)
     type = options |> Keyword.get(:type)
@@ -23,16 +14,16 @@ defmodule Telegex.Marked.Rule do
         implement_single_mark(mark, type)
       end
     else
-      using(:inline)
+      using()
     end
   end
 
-  defp using(:inline) do
+  defp using() do
     quote do
       @behaviour Telegex.Marked.Rule
 
       alias Telegex.Marked.Node
-      alias Telegex.Marked.InlineState
+      alias Telegex.Marked.{State, InlineState, BlockState}
 
       import Telegex.Marked.{Node, Rule}
     end
@@ -40,20 +31,20 @@ defmodule Telegex.Marked.Rule do
 
   defp implement_multi_mark(mark, type) do
     quote do
-      unquote(using(:inline))
+      unquote(using())
 
       @mark unquote(mark)
       @mark_length @mark |> String.length()
 
       @impl true
-      def match?(state) do
+      def match(state) do
         %{line: %{src: src, len: len}, pos: pos} = state
 
-        begin_at_src = src |> String.slice(pos, len)
+        begin_at_src = String.slice(src, pos, len)
 
         if String.starts_with?(begin_at_src, @mark) do
           remainder_src =
-            begin_at_src |> String.slice(@mark_length - 1, String.length(begin_at_src))
+            String.slice(begin_at_src, @mark_length - 1, String.length(begin_at_src))
 
           case remainder_src |> :binary.match(@mark) do
             {begin_index, _} ->
@@ -63,22 +54,21 @@ defmodule Telegex.Marked.Rule do
                 state = %{state | pos: end_index}
 
                 state =
-                  state
-                  |> InlineState.push_node(%Node{
+                  State.push_node(state, %Node{
                     type: unquote(type),
                     children: children_text(src, pos, end_index, @mark_length)
                   })
 
-                {true, state}
+                {:match, state}
               else
-                {false, state}
+                {:nomatch, state}
               end
 
             :nomatch ->
-              {false, state}
+              {:nomatch, state}
           end
         else
-          {false, state}
+          {:nomatch, state}
         end
       end
     end
@@ -86,14 +76,14 @@ defmodule Telegex.Marked.Rule do
 
   defp implement_single_mark(mark, type) do
     quote do
-      unquote(using(:inline))
+      unquote(using())
 
       @impl true
-      def match?(state) do
+      def match(state) do
         %{line: %{src: src, len: len}, pos: pos} = state
 
         if String.at(src, pos) != unquote(mark) do
-          {false, state}
+          {:nomatch, state}
         else
           chars = String.graphemes(String.slice(src, pos + 1, len))
 
@@ -106,15 +96,14 @@ defmodule Telegex.Marked.Rule do
             state = %{state | pos: end_index}
 
             state =
-              state
-              |> InlineState.push_node(%Node{
+              State.push_node(state, %Node{
                 type: unquote(type),
                 children: children_text(src, pos, end_index)
               })
 
-            {true, state}
+            {:match, state}
           else
-            {false, state}
+            {:nomatch, state}
           end
         end
       end
@@ -123,7 +112,8 @@ defmodule Telegex.Marked.Rule do
 
   @type ok? :: boolean()
 
-  @callback match?(Telegex.Marked.state()) :: {ok?(), Telegex.Marked.state()}
+  @callback match(Telegex.Marked.state()) ::
+              {Telegex.Marked.match_status(), Telegex.Marked.state()}
 
   @spec calculate_end_index(integer() | nil, integer()) :: integer() | nil
   def calculate_end_index(index, pos), do: calculate_end_index(index, pos, 1)

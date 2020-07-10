@@ -1,3 +1,8 @@
+defprotocol Telegex.Marked.State do
+  @spec push_node(t(), Telegex.Marked.Node.t()) :: t()
+  def push_node(state, node)
+end
+
 defmodule Telegex.Marked.InlineState do
   @moduledoc false
 
@@ -20,8 +25,40 @@ defmodule Telegex.Marked.InlineState do
     }
   end
 
-  @spec push_node(t(), Node.t()) :: t()
-  def push_node(%__MODULE__{} = state, %Node{} = node) do
-    %{state | nodes: state.nodes ++ [node]}
+  defimpl Telegex.Marked.State do
+    def push_node(state, %Node{} = node) do
+      %{state | nodes: state.nodes ++ [node]}
+    end
+  end
+end
+
+defmodule Telegex.Marked.BlockState do
+  @moduledoc false
+
+  alias Telegex.Marked.{Node, Line}
+
+  @enforce_keys [:lines]
+  defstruct lines: [], len: nil, pos: 0, ending: nil, nodes: []
+
+  @type t :: %__MODULE__{
+          lines: [Line.t()],
+          len: integer(),
+          pos: integer(),
+          nodes: [Node.t()]
+        }
+
+  @spec new([Line.t()], integer()) :: t()
+  def new(lines, pos) when is_list(lines) do
+    %__MODULE__{
+      lines: lines,
+      len: length(lines),
+      pos: pos
+    }
+  end
+
+  defimpl Telegex.Marked.State do
+    def push_node(state, %Node{} = node) do
+      %{state | nodes: state.nodes ++ [node]}
+    end
   end
 end

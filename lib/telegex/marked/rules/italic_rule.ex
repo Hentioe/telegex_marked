@@ -9,24 +9,26 @@ defmodule Telegex.Marked.ItalicRule do
   @ntype :italic
 
   @impl true
-  def match?(state) do
+  def match(state) do
     %{line: %{src: src, len: len}, pos: pos} = state
 
     if String.at(src, pos) != unquote(@mark) do
-      {false, state}
+      {:nomatch, state}
     else
       chars = String.graphemes(String.slice(src, pos + 1, len))
+
+      equals_mark_fun = fn {char, index} ->
+        if char == @mark do
+          Enum.at(chars, index + 1) != @mark
+        else
+          false
+        end
+      end
 
       {_, index} =
         chars
         |> Enum.with_index()
-        |> Enum.filter(fn {char, index} ->
-          if char == @mark do
-            Enum.at(chars, index + 1) != @mark
-          else
-            false
-          end
-        end)
+        |> Enum.filter(equals_mark_fun)
         |> Enum.find(fn {_, index} ->
           # 跳过 underline 的标记符
           # 如果前一个也是 @mark 但前第二个不是，则不匹配（有且仅有两个 @mark 相连）
@@ -40,15 +42,14 @@ defmodule Telegex.Marked.ItalicRule do
         state = %{state | pos: end_index}
 
         state =
-          state
-          |> InlineState.push_node(%Node{
+          State.push_node(state, %Node{
             type: @ntype,
             children: children_text(src, pos, end_index)
           })
 
-        {true, state}
+        {:match, state}
       else
-        {false, state}
+        {:nomatch, state}
       end
     end
   end

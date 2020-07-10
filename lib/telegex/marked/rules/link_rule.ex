@@ -13,11 +13,11 @@ defmodule Telegex.Marked.LinkRule do
   @close_parenthesis ")"
 
   @impl true
-  def match?(state) do
+  def match(state) do
     %{line: %{src: src, len: len}, pos: pos} = state
 
     if String.at(src, pos) != @open_bracket do
-      {false, state}
+      {:nomatch, state}
     else
       chars = String.graphemes(String.slice(src, pos + 1, len))
 
@@ -27,26 +27,21 @@ defmodule Telegex.Marked.LinkRule do
       with {:ok, close_bracket_pos} <- find_close_bracket_pos(chars),
            {:ok, close_parenthesis_pos} <-
              find_close_parenthesis_pos(close_bracket_pos, chars) do
-        link_text = src |> String.slice(pos + 1, close_bracket_pos)
-
-        href =
-          src
-          |> String.slice(close_bracket_pos + 3, close_parenthesis_pos - 1)
-
+        text = String.slice(src, pos + 1, close_bracket_pos)
+        href = String.slice(src, close_bracket_pos + 3, close_parenthesis_pos - 1)
         state = %{state | pos: close_bracket_pos + close_parenthesis_pos + 2}
 
         state =
-          state
-          |> InlineState.push_node(%Node{
+          State.push_node(state, %Node{
             type: @ntype,
             data: [href: href],
-            children: link_text
+            children: text
           })
 
-        {true, state}
+        {:match, state}
       else
         _ ->
-          {false, state}
+          {:nomatch, state}
       end
     end
   end
