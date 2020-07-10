@@ -4,7 +4,7 @@ Markdown parsing/rendering library customized for Telegram.
 
 ## Background introduction
 
-For Telegram robots, sending messages in Markdown format is very dangerous. Because **the interpretation of Markdown by the Telegram server is very bad**.
+For Telegram bots, sending messages in Markdown format is very dangerous. Because **the interpretation of Markdown by the Telegram server is very bad**.
 
 ### Like this
 
