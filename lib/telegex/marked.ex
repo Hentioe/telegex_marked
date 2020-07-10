@@ -4,7 +4,7 @@ defmodule Telegex.Marked do
   """
 
   @type document :: [[Telegex.Marked.Node.t()]]
-  @type state :: Telegex.Marked.InlineState.t()
+  @type state :: Telegex.Marked.InlineState.t() | Telegex.Marked.BlockState.t()
   @type inline_match_status :: :match | :nomatch
   @type match_status :: inline_match_status()
 
