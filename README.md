@@ -4,7 +4,7 @@ Markdown parsing/rendering library customized for Telegram.
 
 ## Background introduction
 
-For Telegram bots, sending messages in Markdown format is very dangerous. Because **the interpretation of Markdown by the Telegram server is very bad**.
+For Telegram bots, sending messages in Markdown format is very dangerous. Because **the implementation of Markdown parsing by the Telegram server is very bad**.
 
 ### Like this
 
@@ -38,7 +38,7 @@ This library has customized support for `MarkdownV2` to solve these situations. 
 
 Not only that, when the wrong Markdown format appears, it can still be parsed as safe HTML. To avoid the failure of sending messages.
 
-    markdown """
+    markdown = """
     *bold*
     _italic_
     __underline__
@@ -55,7 +55,7 @@ Not only that, when the wrong Markdown format appears, it can still be parsed as
     ```
     """
 
-    html """
+    html = """
     <b>bold</b>
     <i>italic</i>
     <u>underline</u>
