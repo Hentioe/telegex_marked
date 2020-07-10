@@ -6,7 +6,7 @@ defmodule Telegex.Marked do
   @type document :: [[Telegex.Marked.Node.t()]]
   @type state :: Telegex.Marked.InlineState.t()
   @type inline_match_status :: :match | :nomatch
-  @type match_status :: match_status()
+  @type match_status :: inline_match_status()
 
   @spec as_html(String.t()) :: String.t()
   @doc """

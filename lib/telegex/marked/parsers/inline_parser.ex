@@ -42,7 +42,6 @@ defmodule Telegex.Marked.InlineParser do
         end
 
       {:nomatch, state} ->
-        # 如果不匹配任何节点，逐字符继续匹配。
         nomatch(line, state, nodes, state.pos <= init_state.line.len - 1, lastline?)
     end
   end
@@ -57,9 +56,9 @@ defmodule Telegex.Marked.InlineParser do
     end)
   end
 
+  # 如果不匹配任何节点，逐字符继续匹配。
   @spec nomatch(String.t(), InlineState.t(), [Node.t()], boolean(), boolean()) :: [Node.t()]
   defp nomatch(line, %InlineState{} = state, nodes, not_ending?, lastline?) do
-    # 如果最后一个节点也是字符串，则合并（避免逐字符匹配产生大量的连续单字符节点）。
     if not_ending? do
       len = length(nodes)
       this_char = String.at(line, state.pos)
@@ -69,7 +68,7 @@ defmodule Telegex.Marked.InlineParser do
           {last_node, nodes} = nodes |> List.pop_at(len - 1)
 
           case last_node do
-            # 合并字符到上一个字符串节点中
+            # 为避免逐字符匹配产生大量的连续单字符节点，合并最后一个为字符串的节点。
             %Node{type: :string, data: data} ->
               nodes ++ [string_node(data <> this_char)]
 
