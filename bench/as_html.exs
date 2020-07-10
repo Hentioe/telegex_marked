@@ -5,6 +5,9 @@ normal1*bold1*normal2*blod2*normal3
 [inline URL](http://www.example.com/)
 [inline mention of a user](tg://user?id=123456789)
 `inline fixed-width code`
+```python
+pre-formatted fixed-width code block written in the Python programming language
+```
 """
 
 earmark_markdown = """
@@ -14,6 +17,9 @@ normal1**bold1**normal2**blod2**normal3
 [inline URL](http://www.example.com/)
 [inline mention of a user](tg://user?id=123456789)
 `inline fixed-width code`
+```python
+pre-formatted fixed-width code block written in the Python programming language
+```
 """
 
 marked_fun = fn ->
