@@ -48,13 +48,24 @@ defmodule Telegex.Marked.BlockState do
         }
 
   @spec new([Line.t()], integer()) :: t()
-  def new(lines, pos) when is_list(lines) do
+  def new(lines, pos) when is_list(lines) and is_integer(pos) do
+    new({lines, length(lines)}, pos)
+  end
+
+  @spec new({[Line.t()], integer()}, integer()) :: t()
+  def new({lines, len}, pos) when is_list(lines) and is_integer(len) and is_integer(pos) do
     %__MODULE__{
       lines: lines,
-      len: length(lines),
+      len: len,
       pos: pos
     }
   end
+
+  @spec lastline?(t()) :: boolean()
+  def lastline?(%{pos: pos, len: len}), do: pos + 1 == len
+
+  @spec ending?(t()) :: boolean()
+  def ending?(%{ending: ending, len: len}), do: ending + 1 == len
 
   defimpl Telegex.Marked.State do
     def push_node(state, %Node{} = node) do

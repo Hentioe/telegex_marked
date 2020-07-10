@@ -89,7 +89,10 @@ defmodule Telegex.Marked.Rule do
 
           end_index =
             chars
-            |> Enum.find_index(&(&1 == unquote(mark)))
+            |> Enum.with_index()
+            |> Enum.find_index(fn {char, index} ->
+              char == unquote(mark) && Enum.at(chars, index + 1) != unquote(mark)
+            end)
             |> calculate_end_index(pos)
 
           if end_index do
@@ -109,8 +112,6 @@ defmodule Telegex.Marked.Rule do
       end
     end
   end
-
-  @type ok? :: boolean()
 
   @callback match(Telegex.Marked.state()) ::
               {Telegex.Marked.match_status(), Telegex.Marked.state()}

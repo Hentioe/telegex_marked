@@ -6,7 +6,7 @@ defmodule Telegex.Marked.Parser do
   defmacro __using__(_) do
     quote do
       alias Telegex.Marked.Node
-      alias Telegex.Marked.InlineState
+      alias Telegex.Marked.{InlineState, BlockState}
 
       import Telegex.Marked.Node
     end
@@ -14,11 +14,13 @@ defmodule Telegex.Marked.Parser do
 
   @type parseopts :: keyword()
 
+  alias Telegex.Marked.BlockParser
+
   @spec parse(String.t(), parseopts()) :: Telegex.Marked.document()
   @doc """
   Convert Markdown string to document (node tree).
   """
-  def parse(_markdown, _options \\ []) do
-    []
+  def parse(markdown, options \\ []) do
+    BlockParser.parse(markdown, options)
   end
 end

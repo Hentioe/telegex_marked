@@ -5,14 +5,16 @@ defmodule Telegex.Marked do
 
   @type document :: [[Telegex.Marked.Node.t()]]
   @type state :: Telegex.Marked.InlineState.t() | Telegex.Marked.BlockState.t()
-  @type inline_match_status :: :match | :nomatch
-  @type match_status :: inline_match_status()
+  @type match_status :: :match | :nomatch
 
   @spec as_html(String.t()) :: String.t()
+
+  alias Telegex.Marked.{BlockParser, HTMLRenderer}
+
   @doc """
   Convert Markdown text to HTML text.
   """
-  def as_html(_markdown) do
-    "Not Implemented"
+  def as_html(markdown, _options \\ []) do
+    markdown |> String.trim() |> BlockParser.parse() |> HTMLRenderer.render()
   end
 end
