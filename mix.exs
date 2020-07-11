@@ -2,7 +2,7 @@ defmodule Telegex.Marked.MixProject do
   use Mix.Project
   @description "Safe Markdown parser/renderer for Telegram."
 
-  @version "0.0.2"
+  @version "0.0.3"
 
   def project do
     [
