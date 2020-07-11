@@ -10,22 +10,22 @@ defmodule Telegex.Marked.HTMLRenderer do
     document |> Enum.map(&render_nodes/1) |> Enum.join("")
   end
 
-  @spec render_nodes([Node.t()]) :: String.t()
   @doc """
   Render node list.
 
   Generally speaking, a node represents a line of content in Markdown text.
   """
+  @spec render_nodes([Node.t()]) :: String.t()
   def render_nodes(nodes) do
     nodes |> Enum.map(&render_node/1) |> Enum.join("")
   end
 
-  @spec render_node(Node.t()) :: String.t()
   @doc """
   Render node.
 
   This function will render different HTML elements according to different node types, including child nodes.
   """
+  @spec render_node(Node.t()) :: String.t()
   def render_node(%Node{type: :bold, children: children}) do
     children_html = render_nodes(children)
     "<b>" <> children_html <> "</b>"

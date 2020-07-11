@@ -10,11 +10,12 @@ defmodule Telegex.Marked.BlockParser do
 
   @rule_modules [BlockCodeRule]
 
-  @spec parse(String.t(), keyword()) :: Telegex.Marked.document()
   @doc """
   Parse Markdown text, including inline elements.
-  **Note**: This function is generally not called directly, please use `Telegex.Marked.as_html/2` instead.
+
+  Note: This function is generally not called directly, please use `Telegex.Marked.as_html/2` instead.
   """
+  @spec parse(String.t(), keyword()) :: Telegex.Marked.document()
   def parse(markdown, _options \\ []) do
     markdown |> lines_info() |> parse_all(0)
   end

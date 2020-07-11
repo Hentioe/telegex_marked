@@ -12,14 +12,12 @@ defmodule Telegex.Marked.Parser do
     end
   end
 
-  @typep parseopts :: keyword()
-
   alias Telegex.Marked.BlockParser
 
-  @spec parse(String.t(), parseopts()) :: Telegex.Marked.document()
   @doc """
   Convert Markdown string to document (node tree).
   """
+  @spec parse(String.t(), keyword()) :: Telegex.Marked.document()
   def parse(markdown, options \\ []) do
     BlockParser.parse(markdown, options)
   end

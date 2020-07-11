@@ -1,10 +1,10 @@
 # Telegex.Marked
 
 [![Hex.pm](https://img.shields.io/hexpm/v/telegex_marked.svg)](http://hex.pm/packages/telegex_marked)
+[![Docs](https://img.shields.io/badge/api-docs-green.svg)](https://hexdocs.pm/telegex_marked/api-reference.html)
+[![Telegram chat link](https://img.shields.io/badge/chat-telegex-blue.svg)](https://t.me/elixir_telegex)
 
-Markdown parsing/rendering library customized for Telegram.
-
-As an optional enhanced support, this library is part of [Telegex](https://github.com/Hentioe/telegex).
+Markdown parsing/rendering library customized for Telegram. As an optional enhanced support, this library is part of [Telegex](https://github.com/Hentioe/telegex).
 
 ## Background introduction
 
@@ -12,7 +12,7 @@ For Telegram bots, sending messages in Markdown format is very dangerous. Becaus
 
 ### Like this
 
-Create a link containing `](` in the text:
+Create a link containing "](" in the text:
 
 ```elixir
 markdown = "[[Google](](https://google.com)"
@@ -29,7 +29,8 @@ As a result, there was an accident:
 ```elixir
 {:error,
  %Telegex.Model.Error{
-   description: "Bad Request: can't parse entities: Can't find end of TextUrl entity at byte offset 14",
+   description:
+     "Bad Request: can't parse entities: Can't find end of TextUrl entity at byte offset 14",
    error_code: 400
  }}
 ```

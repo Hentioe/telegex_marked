@@ -32,26 +32,26 @@ defmodule Telegex.Marked.Node do
     %__MODULE__{type: :string, data: text}
   end
 
-  @spec string_children(String.t()) :: [t()]
   @doc """
   Create a node of type string wrapped in a list.
   """
+  @spec string_children(String.t()) :: [t()]
   def string_children(text) do
     [string_node(text)]
   end
 
-  @spec newline_node :: t()
   @doc """
   Create a node of type newline.
   """
+  @spec newline_node :: t()
   def newline_node() do
     %__MODULE__{type: :newline}
   end
 
-  @spec newline_children :: [t()]
   @doc """
   Create a node of type newline wrapped in a list.
   """
+  @spec newline_children :: [t()]
   def newline_children() do
     [newline_node()]
   end
