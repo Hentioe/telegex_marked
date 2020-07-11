@@ -14,13 +14,13 @@ For Telegram bots, sending messages in Markdown format is very dangerous. There 
 
 ### Like this
 
-Create a link containing "](" in the text:
+Create a link containing `](` in the text:
 
 ```elixir
 markdown = "[[Google](](https://google.com)"
 ```
 
-Set `parse_mode` to "Markdown" or "Markdown2", and send:
+Set `parse_mode` to `Markdown` or `Markdown2`, and send:
 
 ```elixir
 Telegex.send_message(chat_id, markdown, parse_mode: "MarkdownV2")
