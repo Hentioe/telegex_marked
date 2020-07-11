@@ -1,5 +1,6 @@
 defmodule Telegex.Marked.MixProject do
   use Mix.Project
+  @description "Safe Markdown parser/renderer for Telegram."
 
   @version "0.0.1"
 
@@ -9,7 +10,23 @@ defmodule Telegex.Marked.MixProject do
       version: @version,
       elixir: "~> 1.10",
       start_permanent: Mix.env() == :prod,
-      deps: deps()
+      deps: deps(),
+      description: @description,
+      package: package(),
+      name: "Telegex.Marked",
+      source_url: "https://github.com/Hentioe/telegex_marked",
+      docs: [
+        # The main page in the docs
+        main: "readme",
+        extras: ["README.md"]
+      ]
+    ]
+  end
+
+  defp package do
+    [
+      licenses: ["MIT"],
+      links: %{"GitHub" => "https://github.com/Hentioe/telegex_marked"}
     ]
   end
 

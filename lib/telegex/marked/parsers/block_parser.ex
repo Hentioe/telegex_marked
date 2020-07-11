@@ -11,11 +11,15 @@ defmodule Telegex.Marked.BlockParser do
   @rule_modules [BlockCodeRule]
 
   @spec parse(String.t(), keyword()) :: Telegex.Marked.document()
+  @doc """
+  Parse Markdown text, including inline elements.
+  **Note**: This function is generally not called directly, please use `Telegex.Marked.as_html/2` instead.
+  """
   def parse(markdown, _options \\ []) do
     markdown |> lines_info() |> parse_all(0)
   end
 
-  @spec parse({[Line.t()], integer()}, [Node.t()]) :: Telegex.Marked.document()
+  @spec parse_all({[Line.t()], integer()}, integer(), [[Node.t()]]) :: Telegex.Marked.document()
   defp parse_all({lines, len} = lines_info, pos, nodes \\ [])
        when is_list(lines) and is_integer(len) and is_integer(pos) and is_list(nodes) do
     init_state = BlockState.new({lines, len}, pos)
@@ -46,7 +50,7 @@ defmodule Telegex.Marked.BlockParser do
     |> InlineParser.parse_line(lastline?, 0)
   end
 
-  @spec parse_node(BlockState.t()) :: {Telegex.Marked.match_status(), BlockState.t()}
+  @spec parse_node(BlockState.t()) :: {Telegex.Marked.Rule.match_status(), BlockState.t()}
   defp parse_node(%BlockState{} = state) do
     @rule_modules
     |> Enum.reduce_while({:nomatch, state}, fn rule_module, result ->

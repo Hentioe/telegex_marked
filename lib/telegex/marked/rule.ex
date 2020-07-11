@@ -1,7 +1,9 @@
 defmodule Telegex.Marked.Rule do
-  @moduledoc """
-  Node matching and parsing rules.
-  """
+  @moduledoc false
+  # Node matching and parsing rules.
+
+  @type match_status :: :match | :nomatch
+  @type state :: Telegex.Marked.InlineState.t() | Telegex.Marked.BlockState.t()
 
   defmacro __using__(options) do
     mark = options |> Keyword.get(:mark)
@@ -113,8 +115,7 @@ defmodule Telegex.Marked.Rule do
     end
   end
 
-  @callback match(Telegex.Marked.state()) ::
-              {Telegex.Marked.match_status(), Telegex.Marked.state()}
+  @callback match(state :: state()) :: {match_status(), state()}
 
   @spec calculate_end_index(integer() | nil, integer()) :: integer() | nil
   def calculate_end_index(index, pos), do: calculate_end_index(index, pos, 1)

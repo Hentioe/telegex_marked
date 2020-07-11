@@ -12,7 +12,7 @@ defmodule Telegex.Marked.Parser do
     end
   end
 
-  @type parseopts :: keyword()
+  @typep parseopts :: keyword()
 
   alias Telegex.Marked.BlockParser
 

@@ -1,7 +1,6 @@
 defmodule Telegex.Marked.ItalicRule do
-  @moduledoc """
-  Matching and parsing of italic nodes.
-  """
+  @moduledoc false
+  # Matching and parsing of italic nodes.
 
   use Telegex.Marked.Rule
 

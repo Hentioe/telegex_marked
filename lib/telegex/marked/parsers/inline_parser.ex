@@ -16,6 +16,9 @@ defmodule Telegex.Marked.InlineParser do
 
   @rule_modules [BoldRule, UnderlineRule, ItalicRule, StrikethroughRule, LinkRule, InlineCodeRule]
 
+  @doc """
+  Parse inline elements in Markdown text.
+  """
   @spec parse(String.t(), keyword()) :: Telegex.Marked.document()
   def parse(markdown, _options \\ []) do
     lines = markdown |> String.split("\n")
@@ -28,6 +31,9 @@ defmodule Telegex.Marked.InlineParser do
   end
 
   @spec parse_line(String.t(), boolean(), integer(), [Node.t()]) :: [Node.t()]
+  @doc """
+  Parse single-line Markdown text.
+  """
   def parse_line(line, lastline?, pos, nodes \\ [])
       when is_binary(line) and is_boolean(lastline?) and is_integer(pos) and is_list(nodes) do
     init_state = InlineState.new(line, pos)
@@ -47,7 +53,7 @@ defmodule Telegex.Marked.InlineParser do
     end
   end
 
-  @spec parse_node(InlineState.t()) :: {Telegex.Marked.match_status(), InlineState.t()}
+  @spec parse_node(InlineState.t()) :: {Telegex.Marked.Rule.match_status(), InlineState.t()}
   defp parse_node(%InlineState{} = state) do
     @rule_modules
     |> Enum.reduce_while({:nomatch, state}, fn rule_module, result ->

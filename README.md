@@ -1,5 +1,7 @@
 # Telegex.Marked
 
+[![Hex.pm](https://img.shields.io/hexpm/v/telegex_marked.svg)](http://hex.pm/packages/telegex_marked)
+
 Markdown parsing/rendering library customized for Telegram.
 
 ## Background introduction
@@ -11,7 +13,7 @@ For Telegram bots, sending messages in Markdown format is very dangerous. Becaus
 Create a link containing `](` in the text:
 
 ```elixir
-iex>markdown = "[[Google](](https://google.com)"
+markdown = "[[Google](](https://google.com)"
 ```
 
 Set `parse_mode` to `Markdown` or `Markdown2`, and send:

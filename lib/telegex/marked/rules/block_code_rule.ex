@@ -1,7 +1,6 @@
 defmodule Telegex.Marked.BlockCodeRule do
-  @moduledoc """
-  Matching and parsing of block code nodes.
-  """
+  @moduledoc false
+  # Matching and parsing of block code nodes.
 
   use Telegex.Marked.Rule
 

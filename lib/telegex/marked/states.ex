@@ -1,4 +1,6 @@
 defprotocol Telegex.Marked.State do
+  @moduledoc false
+
   @spec push_node(t(), Telegex.Marked.Node.t()) :: t()
   def push_node(state, node)
 end

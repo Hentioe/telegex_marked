@@ -1,7 +1,6 @@
 defmodule Telegex.Marked.LinkRule do
-  @moduledoc """
-  Matching and parsing of link nodes.
-  """
+  @moduledoc false
+  # Matching and parsing of link nodes.
 
   use Telegex.Marked.Rule
 

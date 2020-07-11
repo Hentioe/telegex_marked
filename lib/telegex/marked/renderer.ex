@@ -1,7 +1,6 @@
 defmodule Telegex.Marked.Renderer do
   @moduledoc """
-  Render node document.
-  The specific rendering results are implemented by different rendering backends, such as `Telegex.Marked.Renderer.HTMLRenderer`.
+  Render node tree document.
   """
   defmacro __using__(_) do
     quote do
@@ -11,5 +10,9 @@ defmodule Telegex.Marked.Renderer do
     end
   end
 
-  @callback render(Telegex.Marked.document(), keyword()) :: String.t()
+  @doc """
+  Render the node tree document as text content.
+  The specific rendering result is implemented by the renderer that implements this function.
+  """
+  @callback render(document :: Telegex.Marked.document(), options :: keyword()) :: String.t()
 end
