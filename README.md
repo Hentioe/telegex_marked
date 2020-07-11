@@ -4,11 +4,13 @@
 [![Docs](https://img.shields.io/badge/api-docs-green.svg)](https://hexdocs.pm/telegex_marked/api-reference.html)
 [![Telegram chat link](https://img.shields.io/badge/chat-telegex-blue.svg)](https://t.me/elixir_telegex)
 
-Markdown parsing/rendering library customized for Telegram. As an optional enhanced support, this library is part of [Telegex](https://github.com/Hentioe/telegex).
+Markdown parsing/rendering library customized for Telegram.
+
+As an optional enhanced support, this library is part of [Telegex](https://github.com/Hentioe/telegex). To build a reliable bot program that can safely send complex messages, it is recommended to use this library to participate in development.
 
 ## Background introduction
 
-For Telegram bots, sending messages in Markdown format is very dangerous. Because **the implementation of Markdown parsing by the Telegram server is very bad**.
+For Telegram bots, sending messages in Markdown format is very dangerous. There are **many problems with Telegram server support for Markdown**.
 
 ### Like this
 
@@ -18,7 +20,7 @@ Create a link containing "](" in the text:
 markdown = "[[Google](](https://google.com)"
 ```
 
-Set `parse_mode` to `Markdown` or `Markdown2`, and send:
+Set `parse_mode` to "Markdown" or "Markdown2", and send:
 
 ```elixir
 Telegex.send_message(chat_id, markdown, parse_mode: "MarkdownV2")
