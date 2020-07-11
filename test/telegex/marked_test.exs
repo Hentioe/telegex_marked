@@ -5,14 +5,14 @@ defmodule Telegex.MarkedTest do
   import Telegex.Marked
 
   test "escape_text/2" do
-    link_text = "*_~[]()`"
+    link_text = "*_~[]()`\\"
 
     markdown = """
     [#{escape_text(link_text)}](link://path)
     """
 
     html = """
-    <a href="link://path">*_~[]()`</a>
+    <a href="link://path">*_~[]()`\\</a>
     """
 
     assert as_html(markdown) == html
