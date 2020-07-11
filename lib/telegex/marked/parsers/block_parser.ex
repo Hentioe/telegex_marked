@@ -33,7 +33,7 @@ defmodule Telegex.Marked.BlockParser do
         end
 
       {:nomatch, state} ->
-        if state.pos <= state.len - 1 do
+        if state.pos < state.len - 1 do
           inline_nodes = nomatch(state, false)
           parse_all(lines_info, state.pos + 1, nodes ++ [inline_nodes])
         else

@@ -2,6 +2,8 @@ defmodule Telegex.MarkedTest do
   use ExUnit.Case
   doctest Telegex.Marked
 
+  import Telegex.Marked
+
   @markdown """
   *bold*
   _italic_
@@ -33,6 +35,13 @@ defmodule Telegex.MarkedTest do
   """
 
   test "as_html/1" do
-    assert Telegex.Marked.as_html(@markdown) == @html |> String.trim()
+    assert as_html(@markdown) == @html
+  end
+
+  test "entities replace" do
+    markdown = "[<Google&Search>](https://www.google.com)"
+    html = ~s(<a href="https://www.google.com">&lt;Google&amp;Search&gt;</a>)
+
+    assert as_html(markdown) == html
   end
 end

@@ -10,10 +10,10 @@ defmodule Telegex.Marked do
 
   @spec as_html(String.t()) :: String.t()
   @doc """
-  Convert Markdown text to HTML text.  
+  Convert Markdown text to HTML text.
   **Note**: The current `options` parameter is reserved and has no practical meaning.
   """
   def as_html(markdown, _options \\ []) do
-    markdown |> String.trim() |> BlockParser.parse() |> HTMLRenderer.render()
+    markdown |> BlockParser.parse() |> HTMLRenderer.render()
   end
 end

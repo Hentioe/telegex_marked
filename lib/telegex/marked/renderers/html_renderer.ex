@@ -77,5 +77,8 @@ defmodule Telegex.Marked.HTMLRenderer do
 
   def render_node(%Node{type: :string, data: data}) do
     data
+    |> String.replace("&", "&amp;")
+    |> String.replace("<", "&lt;")
+    |> String.replace(">", "&gt;")
   end
 end
