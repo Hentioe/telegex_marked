@@ -4,6 +4,20 @@ defmodule Telegex.MarkedTest do
 
   import Telegex.Marked
 
+  test "escape_text/2" do
+    link_text = "*_~[]()`"
+
+    markdown = """
+    [#{escape_text(link_text)}](link://path)
+    """
+
+    html = """
+    <a href="link://path">*_~[]()`</a>
+    """
+
+    assert as_html(markdown) == html
+  end
+
   test "entities replace" do
     markdown = "[<Google&Search>](https://www.google.com)"
     html = ~s(<a href="https://www.google.com">&lt;Google&amp;Search&gt;</a>)

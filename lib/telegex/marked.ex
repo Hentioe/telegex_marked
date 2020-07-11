@@ -51,4 +51,18 @@ defmodule Telegex.Marked do
   def as_html(markdown, _options \\ []) do
     markdown |> BlockParser.parse() |> HTMLRenderer.render()
   end
+
+  @doc ~S"""
+  Escape the Markdown markups contained in the text.
+
+  ## Examples
+      iex> Telegex.Marked.escape_text("*_~[]()`")
+      ~S"\*\_\~\[\]\(\)\`"
+
+  Note: The current options parameter is reserved and has no practical meaning.
+  """
+  @spec escape_text(String.t(), keyword()) :: String.t()
+  def escape_text(text, _options \\ []) do
+    String.replace(text, ~r/(\*|_|~|\[|\]|\(|\)|`)/, "\\\\\\g{1}")
+  end
 end
