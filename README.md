@@ -34,6 +34,18 @@ As a result, there was an accident:
 
 You can choose to escape certain characters, but in the face of dynamic text (such as getting the user's name), it is still very dangerous.
 
+## Installation
+
+Add telegex_marked to your `mix.exs` dependencies:
+
+```elixir
+def deps do
+  [{:telegex_marked, "~> 0.1.0"}]
+end
+```
+
+Run the `mix deps.get` command to install.
+
 ## Features
 
 This library has customized support for `MarkdownV2` to solve these situations. It renders Markdown as HTML, and the HTML is relatively safe.
