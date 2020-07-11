@@ -4,6 +4,8 @@
 
 Markdown parsing/rendering library customized for Telegram.
 
+As an optional enhanced support, this library is part of [Telegex](https://github.com/Hentioe/telegex).
+
 ## Background introduction
 
 For Telegram bots, sending messages in Markdown format is very dangerous. Because **the implementation of Markdown parsing by the Telegram server is very bad**.
@@ -54,22 +56,24 @@ Not only that, when the wrong Markdown format appears, it can still be parsed as
 
 All Markdown elements supported (including nesting support):
 
-    markdown = """
-    *bold*
-    _italic_
-    __underline__
-    ~strikethrough~
-    *bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
-    [inline URL](http://www.example.com/)
-    [inline mention of a user](tg://user?id=123456789)
-    `inline fixed-width code`
-    ```
-    pre-formatted fixed-width code block
-    ```
-    ```python
-    pre-formatted fixed-width code block written in the Python programming language
-    ```
-    """
+````elixir
+markdown = """
+*bold*
+_italic_
+__underline__
+~strikethrough~
+*bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
+[inline URL](http://www.example.com/)
+[inline mention of a user](tg://user?id=123456789)
+`inline fixed-width code`
+```
+pre-formatted fixed-width code block
+```
+```python
+pre-formatted fixed-width code block written in the Python programming language
+```
+"""
+````
 
 The converted HTML text:
 
