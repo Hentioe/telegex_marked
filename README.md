@@ -52,37 +52,48 @@ This library has customized support for `MarkdownV2` to solve these situations. 
 
 Not only that, when the wrong Markdown format appears, it can still be parsed as safe HTML. To avoid the failure of sending messages.
 
-    markdown = """
-    *bold*
-    _italic_
-    __underline__
-    ~strikethrough~
-    *bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
-    [inline URL](http://www.example.com/)
-    [inline mention of a user](tg://user?id=123456789)
-    `inline fixed-width code`
-    ```
-    pre-formatted fixed-width code block
-    ```
-    ```python
-    pre-formatted fixed-width code block written in the Python programming language
-    ```
-    """
+All Markdown elements supported (including nesting support):
 
-    html = """
-    <b>bold</b>
-    <i>italic</i>
-    <u>underline</u>
-    <s>strikethrough</s>
-    <b>bold <i>italic bold <s>italic bold strikethrough</s> <u>underline italic bold</u></i> bold</b>
-    <a href="http://www.example.com/">inline URL</a>
-    <a href="tg://user?id=123456789">inline mention of a user</a>
-    <code>inline fixed-width code</code>
-    <pre>pre-formatted fixed-width code block</pre>
-    <pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>
-    """
+<pre lang="elixir"><code>
+markdown = """
+*bold*
+_italic_
+__underline__
+~strikethrough~
+*bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
+[inline URL](http://www.example.com/)
+[inline mention of a user](tg://user?id=123456789)
+`inline fixed-width code`
+```
+pre-formatted fixed-width code block
+```
+```python
+pre-formatted fixed-width code block written in the Python programming language
+```
+"""
+</code></pre>
 
-    Telegex.Marked.as_html(markdown) == html # => true
+The converted HTML text:
+
+```elixir
+html = """
+<b>bold</b>
+<i>italic</i>
+<u>underline</u>
+<s>strikethrough</s>
+<b>bold <i>italic bold <s>italic bold strikethrough</s> <u>underline italic bold</u></i> bold</b>
+<a href="http://www.example.com/">inline URL</a>
+<a href="tg://user?id=123456789">inline mention of a user</a>
+<code>inline fixed-width code</code>
+<pre>pre-formatted fixed-width code block</pre>
+<pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>
+"""
+```
+Call the `Telegex.Marked.as_html/2` function and test:
+
+```elixir
+assert Telegex.Marked.as_html(markdown) == html
+```
 
 You only need to convert the Markdown content to HTML before sending, and then specify `parse_mode` as `HTML`.
 The general Markdown parser cannot complete this task because the Markdown format supported by Telegram is incomplete and not standard.
