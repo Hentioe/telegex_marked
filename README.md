@@ -54,24 +54,22 @@ Not only that, when the wrong Markdown format appears, it can still be parsed as
 
 All Markdown elements supported (including nesting support):
 
-<pre lang="elixir"><code>
-markdown = """
-*bold*
-_italic_
-__underline__
-~strikethrough~
-*bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
-[inline URL](http://www.example.com/)
-[inline mention of a user](tg://user?id=123456789)
-`inline fixed-width code`
-```
-pre-formatted fixed-width code block
-```
-```python
-pre-formatted fixed-width code block written in the Python programming language
-```
-"""
-</code></pre>
+    markdown = """
+    *bold*
+    _italic_
+    __underline__
+    ~strikethrough~
+    *bold _italic bold ~italic bold strikethrough~ __underline italic bold___ bold*
+    [inline URL](http://www.example.com/)
+    [inline mention of a user](tg://user?id=123456789)
+    `inline fixed-width code`
+    ```
+    pre-formatted fixed-width code block
+    ```
+    ```python
+    pre-formatted fixed-width code block written in the Python programming language
+    ```
+    """
 
 The converted HTML text:
 
@@ -89,6 +87,7 @@ html = """
 <pre><code class="language-python">pre-formatted fixed-width code block written in the Python programming language</code></pre>
 """
 ```
+
 Call the `Telegex.Marked.as_html/2` function and test:
 
 ```elixir
