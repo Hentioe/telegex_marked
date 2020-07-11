@@ -10,4 +10,25 @@ defmodule Telegex.MarkedTest do
 
     assert as_html(markdown) == html
   end
+
+  # https://github.com/Hentioe/telegex_marked/issues/3
+  test "issue#3" do
+    markdown = """
+    # ```
+    # code
+    # ```
+
+    **continuous markup**
+    """
+
+    html = """
+    # ```
+    # code
+    # ```
+
+    *<b>continuous markup</b>*
+    """
+
+    assert as_html(markdown) == html
+  end
 end

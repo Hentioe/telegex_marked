@@ -6,14 +6,14 @@ defmodule Telegex.Marked.Rule do
   @type state :: Telegex.Marked.InlineState.t() | Telegex.Marked.BlockState.t()
 
   defmacro __using__(options) do
-    mark = options |> Keyword.get(:mark)
-    type = options |> Keyword.get(:type)
+    makrup = options |> Keyword.get(:mark)
+    node_type = options |> Keyword.get(:type)
 
-    if mark do
-      if String.length(mark) > 1 do
-        implement_multi_mark(mark, type)
+    if makrup do
+      if String.length(makrup) > 1 do
+        implement_multi_markup(makrup, node_type)
       else
-        implement_single_mark(mark, type)
+        implement_single_markup(makrup, node_type)
       end
     else
       using()
@@ -31,7 +31,46 @@ defmodule Telegex.Marked.Rule do
     end
   end
 
-  defp implement_multi_mark(mark, type) do
+  defp implement_single_markup(markup, node_type) do
+    quote do
+      unquote(using())
+
+      @impl true
+      def match(state) do
+        %{line: %{src: src, len: len}, pos: pos} = state
+
+        if String.at(src, pos) != unquote(markup) || String.at(src, pos + 1) == unquote(markup) do
+          {:nomatch, state}
+        else
+          chars = String.graphemes(String.slice(src, pos + 1, len))
+
+          end_index =
+            chars
+            |> Enum.with_index()
+            |> Enum.find_index(fn {char, index} ->
+              char == unquote(markup)
+            end)
+            |> calculate_end_index(pos)
+
+          if end_index do
+            state = %{state | pos: end_index}
+
+            state =
+              State.push_node(state, %Node{
+                type: unquote(node_type),
+                children: children_text(src, pos, end_index)
+              })
+
+            {:match, state}
+          else
+            {:nomatch, state}
+          end
+        end
+      end
+    end
+  end
+
+  defp implement_multi_markup(mark, type) do
     quote do
       unquote(using())
 
@@ -71,45 +110,6 @@ defmodule Telegex.Marked.Rule do
           end
         else
           {:nomatch, state}
-        end
-      end
-    end
-  end
-
-  defp implement_single_mark(mark, type) do
-    quote do
-      unquote(using())
-
-      @impl true
-      def match(state) do
-        %{line: %{src: src, len: len}, pos: pos} = state
-
-        if String.at(src, pos) != unquote(mark) do
-          {:nomatch, state}
-        else
-          chars = String.graphemes(String.slice(src, pos + 1, len))
-
-          end_index =
-            chars
-            |> Enum.with_index()
-            |> Enum.find_index(fn {char, index} ->
-              char == unquote(mark) && Enum.at(chars, index + 1) != unquote(mark)
-            end)
-            |> calculate_end_index(pos)
-
-          if end_index do
-            state = %{state | pos: end_index}
-
-            state =
-              State.push_node(state, %Node{
-                type: unquote(type),
-                children: children_text(src, pos, end_index)
-              })
-
-            {:match, state}
-          else
-            {:nomatch, state}
-          end
         end
       end
     end
