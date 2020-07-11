@@ -80,5 +80,7 @@ defmodule Telegex.Marked.HTMLRenderer do
     |> String.replace("&", "&amp;")
     |> String.replace("<", "&lt;")
     |> String.replace(">", "&gt;")
+    |> String.replace(~r/\\([^\\])/, "\\g{1}")
+    |> String.replace("\\\\", "\\")
   end
 end

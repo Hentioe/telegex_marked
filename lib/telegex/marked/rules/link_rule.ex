@@ -15,7 +15,10 @@ defmodule Telegex.Marked.LinkRule do
   def match(state) do
     %{line: %{src: src, len: len}, pos: pos} = state
 
-    if String.at(src, pos) != @open_bracket do
+    prev_char = String.at(src, pos - 1)
+    next_char = String.at(src, pos + 1)
+
+    if ignore_begin?(@open_bracket, String.at(src, pos), prev_char, next_char) do
       {:nomatch, state}
     else
       chars = String.graphemes(String.slice(src, pos + 1, len))
@@ -69,9 +72,7 @@ defmodule Telegex.Marked.LinkRule do
 
     pos =
       parentheses_chars
-      |> Enum.find_index(fn char ->
-        char == @close_parenthesis
-      end)
+      |> Enum.find_index(&(&1 == @close_parenthesis))
 
     if pos, do: {:ok, pos}, else: nil
   end

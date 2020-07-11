@@ -39,7 +39,10 @@ defmodule Telegex.Marked.Rule do
       def match(state) do
         %{line: %{src: src, len: len}, pos: pos} = state
 
-        if String.at(src, pos) != unquote(markup) || String.at(src, pos + 1) == unquote(markup) do
+        prev_char = String.at(src, pos - 1)
+        next_char = String.at(src, pos + 1)
+
+        if ignore_begin?(unquote(markup), String.at(src, pos), prev_char, next_char) do
           {:nomatch, state}
         else
           chars = String.graphemes(String.slice(src, pos + 1, len))
@@ -116,6 +119,27 @@ defmodule Telegex.Marked.Rule do
   end
 
   @callback match(state :: state()) :: {match_status(), state()}
+
+  @spec ignore_begin?(String.t(), String.t(), String.t(), String.t()) :: boolean()
+  def ignore_begin?(markup, pos_char, prev_char, next_char),
+    do:
+      pos_char != markup ||
+        escapes_char?(prev_char) ||
+        next_char == markup
+
+  @doc ~S"""
+  iex> <<92>> == "\\"
+  true
+  """
+  @spec escapes_char?(String.t()) :: boolean()
+  def escapes_char?(<<92>>), do: true
+  def escapes_char?(_), do: false
+
+  def remove_index({elem, _index}), do: elem
+  def remove_index(nil), do: nil
+
+  def elem_or_nil(nil, _index), do: nil
+  def elem_or_nil(tuple, index), do: elem(tuple, index)
 
   @spec calculate_end_index(integer() | nil, integer()) :: integer() | nil
   def calculate_end_index(index, pos), do: calculate_end_index(index, pos, 1)
