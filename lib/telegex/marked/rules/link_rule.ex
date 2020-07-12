@@ -16,9 +16,8 @@ defmodule Telegex.Marked.LinkRule do
     %{line: %{src: src, len: len}, pos: pos} = state
 
     prev_char = String.at(src, pos - 1)
-    next_char = String.at(src, pos + 1)
 
-    if ignore_begin?(@open_bracket, String.at(src, pos), prev_char, next_char) do
+    if String.at(src, pos) != @open_bracket || escapes_char?(prev_char) do
       {:nomatch, state}
     else
       chars = String.graphemes(String.slice(src, pos + 1, len))

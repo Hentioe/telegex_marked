@@ -75,7 +75,7 @@ defmodule Telegex.MarkedTest do
 
   # https://github.com/Hentioe/telegex_marked/issues/9
   @tag :issue9
-  test "issue/9" do
+  test "issue#9" do
     markdown = ~S"""
     _来自『*\*\_\~\[\]\(\)\`\\*』的验证，请确认问题并选择您认为正确的答案。_
     """
@@ -89,7 +89,7 @@ defmodule Telegex.MarkedTest do
 
   # https://github.com/Hentioe/telegex_marked/issues/10
   @tag :issue10
-  test "issue/10" do
+  test "issue#10" do
     markdown = ~S"""
     刚刚 [871769395](tg://user?id=871769395) 通过了验证，用时 13 秒。
     """
@@ -109,6 +109,20 @@ defmodule Telegex.MarkedTest do
 
     html = ~S"""
     刚刚 <a href="tg://user?id=871769395">*_~[]()`\'_', '*', '[', ']', '(', ')', '~', '`', '&gt;', '#', '+', '-', '=', '|', '{', '}', '.', '!'</a> 通过了验证，用时 13 秒。
+    """
+
+    assert as_html(markdown) == html
+  end
+
+  # https://github.com/Hentioe/telegex_marked/issues/8
+  @tag :issue8
+  test "issue#8" do
+    markdown = """
+    [[]]()
+    """
+
+    html = """
+    <a href="">[]</a>
     """
 
     assert as_html(markdown) == html
