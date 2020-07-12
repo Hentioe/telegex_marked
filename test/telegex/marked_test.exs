@@ -86,4 +86,31 @@ defmodule Telegex.MarkedTest do
 
     assert as_html(markdown) == html
   end
+
+  # https://github.com/Hentioe/telegex_marked/issues/10
+  @tag :issue10
+  test "issue/10" do
+    markdown = ~S"""
+    刚刚 [871769395](tg://user?id=871769395) 通过了验证，用时 13 秒。
+    """
+
+    html = ~S"""
+    刚刚 <a href="tg://user?id=871769395">871769395</a> 通过了验证，用时 13 秒。
+    """
+
+    assert as_html(markdown) == html
+
+    name =
+      ~S"*_~[]()`\'_', '*', '[', ']', '(', ')', '~', '`', '>', '#', '+', '-', '=', '|', '{', '}', '.', '!'"
+
+    markdown = """
+    刚刚 [#{escape_text(name)}](tg://user?id=871769395) 通过了验证，用时 13 秒。
+    """
+
+    html = ~S"""
+    刚刚 <a href="tg://user?id=871769395">*_~[]()`\'_', '*', '[', ']', '(', ')', '~', '`', '&gt;', '#', '+', '-', '=', '|', '{', '}', '.', '!'</a> 通过了验证，用时 13 秒。
+    """
+
+    assert as_html(markdown) == html
+  end
 end

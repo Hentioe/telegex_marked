@@ -30,8 +30,9 @@ defmodule Telegex.Marked.LinkRule do
            {:ok, close_parenthesis_pos} <-
              find_close_parenthesis_pos(close_bracket_pos, chars) do
         text = String.slice(src, pos + 1, close_bracket_pos)
-        href = String.slice(src, close_bracket_pos + 3, close_parenthesis_pos - 1)
-        state = %{state | pos: close_bracket_pos + close_parenthesis_pos + 2}
+
+        href = String.slice(src, close_bracket_pos + pos + 3, close_parenthesis_pos - 1)
+        state = %{state | pos: close_bracket_pos + close_parenthesis_pos + pos + 2}
 
         state =
           State.push_node(state, %Node{
@@ -61,8 +62,11 @@ defmodule Telegex.Marked.LinkRule do
       |> List.last()
 
     case result do
-      {_, pos} -> {:ok, pos}
-      nil -> nil
+      {_, pos} ->
+        {:ok, pos}
+
+      nil ->
+        nil
     end
   end
 
