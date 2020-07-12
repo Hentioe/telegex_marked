@@ -51,7 +51,7 @@ defmodule Telegex.Marked.Rule do
             chars
             |> Enum.with_index()
             |> Enum.find_index(fn {char, index} ->
-              char == unquote(markup)
+              char == unquote(markup) && !escapes_char?(Enum.at(chars, index - 1))
             end)
             |> calculate_end_index(pos)
 

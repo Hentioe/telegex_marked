@@ -72,4 +72,18 @@ defmodule Telegex.MarkedTest do
 
     assert as_html(markdown) == html
   end
+
+  # https://github.com/Hentioe/telegex_marked/issues/9
+  @tag :issue9
+  test "issue/9" do
+    markdown = ~S"""
+    _来自『*\*\_\~\[\]\(\)\`\\*』的验证，请确认问题并选择您认为正确的答案。_
+    """
+
+    html = ~S"""
+    <i>来自『<b>*_~[]()`\</b>』的验证，请确认问题并选择您认为正确的答案。</i>
+    """
+
+    assert as_html(markdown) == html
+  end
 end

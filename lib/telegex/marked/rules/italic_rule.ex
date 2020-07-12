@@ -21,7 +21,7 @@ defmodule Telegex.Marked.ItalicRule do
 
       equals_markup_fun = fn {char, index} ->
         if char == @markup do
-          Enum.at(chars, index + 1) != @markup
+          Enum.at(chars, index + 1) != @markup && !escapes_char?(Enum.at(chars, index - 1))
         else
           false
         end

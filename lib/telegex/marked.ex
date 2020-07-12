@@ -49,7 +49,12 @@ defmodule Telegex.Marked do
   """
   @spec as_html(String.t()) :: String.t()
   def as_html(markdown, _options \\ []) do
-    markdown |> BlockParser.parse() |> HTMLRenderer.render()
+    markdown |> replace_raw_enscape() |> BlockParser.parse() |> HTMLRenderer.render()
+  end
+
+  # Temporary solution: replace the real escape character (that is \\) with another string to resolve issue#9
+  defp replace_raw_enscape(text) do
+    String.replace(text, ~S"\\", ~S"ˇenscapeˇ")
   end
 
   @doc ~S"""
