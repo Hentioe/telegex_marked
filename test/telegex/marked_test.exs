@@ -127,4 +127,16 @@ defmodule Telegex.MarkedTest do
 
     assert as_html(markdown) == html
   end
+
+  test "" do
+    markdown = """
+    ____。。。
+    """
+
+    html = """
+    ____。。。
+    """
+
+    assert as_html(markdown) == html
+  end
 end

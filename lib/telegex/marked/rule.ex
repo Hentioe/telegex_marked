@@ -90,11 +90,12 @@ defmodule Telegex.Marked.Rule do
           remainder_src =
             String.slice(begin_at_src, @mark_length - 1, String.length(begin_at_src))
 
-          case remainder_src |> :binary.match(@mark) do
+          case :binary.match(remainder_src, @mark) do
             {begin_index, _} ->
-              end_index = begin_index |> calculate_end_index(pos, @mark_length)
+              end_index = calculate_end_index(begin_index, pos, @mark_length)
+              children_text = children_text(src, pos, end_index, @mark_length)
 
-              if end_index != nil do
+              if end_index != nil && children_text do
                 state = %{state | pos: end_index}
 
                 state =
@@ -150,7 +151,12 @@ defmodule Telegex.Marked.Rule do
 
   @spec children_text(String.t(), integer(), integer()) :: String.t()
   def children_text(src, pos, end_index), do: String.slice(src, pos + 1, end_index - pos - 1)
-  @spec children_text(String.t(), integer(), integer(), integer()) :: String.t()
-  def children_text(src, pos, end_index, mark_length),
-    do: String.slice(src, pos + mark_length, end_index - pos - mark_length - 1)
+  @spec children_text(String.t(), integer(), integer(), integer()) :: String.t() | nil
+  def children_text(src, pos, end_index, mark_length) do
+    len = end_index - pos - mark_length - 1
+
+    if len > 0 do
+      String.slice(src, pos + mark_length, end_index - pos - mark_length - 1)
+    end
+  end
 end
